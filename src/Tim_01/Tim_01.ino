@@ -20,8 +20,10 @@ int hall_pin = 2;
 int hall_count, last_hall, new_hall;
 int rps;
 int timer1_counter;
+bool do_print;
 
 void setup() {
+  do_print = false;
   // initialize serial communication at 9600 bits per second:
   Serial.begin(115200);
   // make the hall pin an input:
@@ -42,7 +44,6 @@ void setup() {
   TCCR1B |= (1 << CS12);    // 256 prescaler 
   TIMSK1 |= (1 << TOIE1);   // enable timer overflow interrupt
   interrupts();             // enable all interrupts
- 
 
 }
 
@@ -53,10 +54,8 @@ void count(){
 ISR(TIMER1_OVF_vect)        // interrupt service routine 
 {
   TCNT1 = timer1_counter;   // preload timer
-  print_count();
+  do_print = true;
 }
-
-
 
 void print_count(){
   last_hall = new_hall;
@@ -68,5 +67,9 @@ void print_count(){
 
 // the loop routine runs over and over again forever:
 void loop() {
-
+// handle flags from interrupt routines
+if (do_print > 0 ) {
+    print_count();
+    do_print = false;
+  }
 }
