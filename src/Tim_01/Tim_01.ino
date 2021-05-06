@@ -21,6 +21,8 @@ int hall_count, last_hall, new_hall;
 int rps;
 int timer1_counter;
 bool do_print;
+int temp_count;
+#define TEMP_EVERY 5
 
 void setup() {
   do_print = false;
@@ -53,10 +55,15 @@ void count(){
   hall_count++;
 }
 
+void print_temp(){
+      Serial.println("I'd be getting the temp about now"); //as in, this still needs to be implemented!
+  }
+
 ISR(TIMER1_OVF_vect)        // interrupt service routine 
 {
   TCNT1 = timer1_counter;   // preload timer
   do_print = true;
+  temp_count++;
 }
 
 void print_count(){
@@ -74,4 +81,10 @@ if (do_print > 0 ) {
     print_count();
     do_print = false;
   }
+
+if (temp_count >= TEMP_EVERY) {
+    temp_count = 0;
+    print_temp();
+  }
+  
 }
