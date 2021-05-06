@@ -1,6 +1,7 @@
 // digital pin 2 is the hall pin
 int hall_pin = 2;
 float hall_count;
+bool last_hall;
  
 void setup() {
   // initialize serial communication at 9600 bits per second:
@@ -17,15 +18,16 @@ void loop() {
   bool on_state = false;
   // counting number of times the hall sensor is tripped
   // but without double counting during the same trip
+    
+    bool new_hall;
 
-    if (digitalRead(hall_pin)==0){
-      if (on_state==false){
-        on_state = true;
-        hall_count+=1.0;
-        Serial.println(hall_count);
-      }
-    } else{
-      on_state = false;
+    new_hall = digitalRead(hall_pin);
+
+    if (new_hall != last_hall) {
+      last_hall= new_hall;
+      hall_count++;
+      Serial.println(hall_count);
     }
+   
 
 }
