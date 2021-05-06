@@ -39,7 +39,8 @@ void setup() {
   //timer1_counter = 64911;   // preload timer 65536-16MHz/256/100Hz
   //timer1_counter = 64286;   // preload timer 65536-16MHz/256/50Hz
   //timer1_counter = 34286;   // preload timer 65536-16MHz/256/2Hz
-  timer1_counter = 17143;   // preload timer 65536-16MHz/512/1Hz 
+  //timer1_counter = 17143;   // preload timer 65536-16MHz/512/1Hz 
+  timer1_counter = 3500;   // preload timer 65536-16MHz/512/1Hz tuned to work at 1Hz on nano every - results may vary! 
   
   TCNT1 = timer1_counter;   // preload timer
   TCCR1B |= (1 << CS12);    // 256 prescaler 
