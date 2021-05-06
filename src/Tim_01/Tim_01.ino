@@ -1,8 +1,24 @@
+// weather
+
+/* the hall effect sensor produces a change in logic level 
+ * when a pole goes by, and with different poles in the 
+ * hardware, we get one count per revolution. We look for
+ * a rising edge in the interrupt routine, and update the 
+ * count by one everytime the interrupt routine is called.
+ *  
+ *  We also have a timer interrupt which prints the number 
+ *  of counts since the last time the count was printed.
+ *  This leaves the main loop free to do other stuff later.
+ *  Note that we assume the serial output is handled in hardware, 
+ *  and therefore it is ok to print in the interrupt handler. If 
+ *  using software serial we need to set a flag to call the print routine
+ */
+
+
 // digital pin 2 is the hall pin
 int hall_pin = 2;
 int hall_count, last_hall, new_hall;
 int rps;
-
 int timer1_counter;
 
 void setup() {
@@ -37,17 +53,20 @@ void count(){
 ISR(TIMER1_OVF_vect)        // interrupt service routine 
 {
   TCNT1 = timer1_counter;   // preload timer
-  
+  print_count();
+}
+
+
+
+void print_count(){
   last_hall = new_hall;
   new_hall = hall_count;
   rps = new_hall - last_hall;
   Serial.print("counts: ");
-  Serial.println(rps);
-  
+  Serial.println(rps);  
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
- 
 
 }
